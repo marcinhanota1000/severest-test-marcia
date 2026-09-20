@@ -9,7 +9,7 @@ describe('Funcionalidade: Cadastro - Usando Pages Objects', () => {
       usuarios = dados;
     });
 
-    CadastroPage.visitarUrl();
+    CadastroPage.visitar();
   });
 
   it('Deve fazer cadastro de usuário admin com sucesso', () => {
