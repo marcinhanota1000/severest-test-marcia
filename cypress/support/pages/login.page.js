@@ -13,7 +13,7 @@ class LoginPage {
   }
 
   validarLoginSucesso() {
-    cy.get('h1').should('contain', 'Bem Vindo');
+    cy.get('h1').should('contain', 'Serverest Store');
   }
 
   validarMensagemErro() {
