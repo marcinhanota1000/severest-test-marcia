@@ -1,46 +1,52 @@
 class CadastroPage {
+  visitar() {
+    cy.visit('/cadastrarusuarios');
+  }
 
-    visitarUrl() {
-        cy.visit('cadastrarusuarios')
-    } 
+  preencherFormulario({ nome, email, senha, admin = false }) {
+    cy.get('[data-testid="nome"]').clear().type(nome);
+    cy.get('[data-testid="email"]').clear().type(email);
+    cy.get('[data-testid="password"]').clear().type(senha);
 
-    campoNome(nome) { 
-        cy.get('[data-testid="nome"]', ).clear().type(nome) 
+    if (admin) {
+      cy.get('[data-testid="checkbox"]').check();
     }
+  }
 
-    campoEmail(email) {
-        cy.get('[data-testid="email"]').clear().type(email)
-    }
+  cadastrar() {
+    cy.get('[data-testid="cadastrar"]').click();
+  }
 
-    campoSenha(senha) {
-        cy.get('[data-testid="password"]').clear().type(senha)
-    }
+  validarMensagemSucesso() {
+    cy.get('.alert').should('contain', 'Cadastro realizado com sucesso');
+  }
 
-    checkAdmin() {
-        cy.get('[data-testid="checkbox"]').check()
-    }
+  cadastrarUsuario(usuario) {
+    this.visitar();
+    this.preencherFormulario(usuario);
+    this.cadastrar();
+    this.validarMensagemSucesso();
+  }
 
-    btnCadastrar() {
-        cy.get('[data-testid="cadastrar"]').click()
-    }
+  cadastroUsuarioComum(nome, email, senha) {
+    this.cadastrarUsuario({ nome, email, senha, admin: false });
+  }
 
-    CadastroUsuarioAdmin(nome, email, senha) {
-        this.campoNome(nome)
-        this.campoEmail(email)
-        this.campoSenha(senha)
-        this.checkAdmin()
-        this.btnCadastrar()
-    }
+  cadastroUsuarioAdmin(nome, email, senha) {
+    this.cadastrarUsuario({ nome, email, senha, admin: true });
+  }
 
-    CadastroUsuarioComumn(nome, email, senha) {
-        this.campoNome(nome)
-        this.campoEmail(email)
-        this.campoSenha(senha)
-        this.btnCadastrar()
-    }
+  CadastroUsuarioComum(nome, email, senha) {
+    this.cadastroUsuarioComum(nome, email, senha);
+  }
 
+  CadastroUsuarioAdmin(nome, email, senha) {
+    this.cadastroUsuarioAdmin(nome, email, senha);
+  }
+
+  CadastroUsuarioComumn(nome, email, senha) {
+    this.cadastroUsuarioComum(nome, email, senha);
+  }
 }
 
-export default new CadastroPage;
-
-
+export default new CadastroPage();

@@ -1,37 +1,40 @@
 /// <reference types="cypress" />
 
+import LoginPage from '../../support/pages/login.page';
+
 describe('Funcionalidade: Login', () => {
+  beforeEach(() => {
+    LoginPage.visitar();
+  });
 
-    afterEach(() => {
-        //Fazer algo depois de CADA cenário
-        cy.screenshot()
+  afterEach(() => {
+    cy.screenshot();
+  });
+
+  it('deve fazer login com sucesso', () => {
+    cy.fixture('login').then(({ email, senha }) => {
+      LoginPage.preencherCredenciais({ email, senha });
+      LoginPage.submeter();
     });
 
-    it('Deve fazer login com sucesso', () => {
-        cy.login('fabio@araujo.com','teste@123')
-        cy.get('h1').should('contain' , 'Bem Vindo')
-        //cy.get('.lead').should('contain' , 'Este é seu sistema para administrar seu ecommerce.')
+    LoginPage.validarLoginSucesso();
+  });
+
+  it('deve validar mensagem de usuário inválido', () => {
+    LoginPage.preencherCredenciais({
+      email: 'usuario@invalido.com',
+      senha: 'teste@123',
     });
+    LoginPage.submeter();
+    LoginPage.validarMensagemErro();
+  });
 
-    it('Deve validar mensagem de usuário inválido', () => {
-        cy.login('dshfsdkfh@teste.com', 'teste@123')
-        cy.get('.alert').should('contain', 'Email e/ou senha inválidos')
-    
+  it('deve validar mensagem de senha inválida', () => {
+    LoginPage.preencherCredenciais({
+      email: 'fabio@araujo.com',
+      senha: 'senha_invalida',
     });
-
-    it('Deve validar mensagem de senha inválida', () => {
-        cy.login('fabio@araujo.com', 'tesdfdfte@123')
-        cy.get('.alert').should('contain', 'Email e/ou senha inválidos')
-    });
-
-    it('Deve fazer login com sucesso usando fixture', () => {
-        cy.fixture('login').then((dadosLogin) =>{
-            cy.login(dadosLogin.email, dadosLogin.senha)
-        })
-        cy.get('h1').should('contain' , 'Bem Vindo')
-
-
-
-    });
-    
+    LoginPage.submeter();
+    LoginPage.validarMensagemErro();
+  });
 });

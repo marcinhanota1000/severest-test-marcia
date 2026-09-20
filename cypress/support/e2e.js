@@ -1,2 +1,2 @@
-import './commands'
-import "allure-cypress/commands";
+import './commands';
+import 'allure-cypress/commands';
