@@ -15,26 +15,29 @@ describe('Funcionalidade: Login', () => {
     cy.fixture('login').then(({ email, senha }) => {
       LoginPage.preencherCredenciais({ email, senha });
       LoginPage.submeter();
+      LoginPage.validarLoginSucesso();
     });
-
-    LoginPage.validarLoginSucesso();
   });
 
   it('deve validar mensagem de usuário inválido', () => {
-    LoginPage.preencherCredenciais({
-      email: 'usuario@invalido.com',
-      senha: 'teste@123',
+    cy.fixture('login').then(({ senha }) => {
+      LoginPage.preencherCredenciais({
+        email: 'usuario@invalido.com',
+        senha,
+      });
+      LoginPage.submeter();
+      LoginPage.validarMensagemErro();
     });
-    LoginPage.submeter();
-    LoginPage.validarMensagemErro();
   });
 
   it('deve validar mensagem de senha inválida', () => {
-    LoginPage.preencherCredenciais({
-      email: 'fabio@araujo.com',
-      senha: 'senha_invalida',
+    cy.fixture('login').then(({ email }) => {
+      LoginPage.preencherCredenciais({
+        email,
+        senha: 'senha_invalida',
+      });
+      LoginPage.submeter();
+      LoginPage.validarMensagemErro();
     });
-    LoginPage.submeter();
-    LoginPage.validarMensagemErro();
   });
 });
